@@ -120,7 +120,7 @@ func (c *client) AddVideoToFolder(videoID, folderID string) error {
 		return err
 	}
 
-	r, err := http.NewRequest("PUT", fmt.Sprintf("%s/accounts/%s/folders/%s/videos/%s", cmsBaseURL, accountID, folderID, videoID), nil)
+	r, err := http.NewRequest("PUT", fmt.Sprintf("%s/accounts/%s/folders/%s/videos/%s", cmsBaseURL, c.accountID, folderID, videoID), nil)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"folderID": folderID,
