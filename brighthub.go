@@ -10,19 +10,30 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type Client interface {
-	AddVideoToFolder(videoID, folderID string) error
-	CreateVideo(req *CreateVideoRequest) (*CreateVideoResponse, error)
-	IngestVideo(videoID string, req *IngestVideoRequest) (*IngestVideoResponse, error)
-}
+type (
+	Client interface {
+		AddVideoToFolder(videoID, folderID string) error
+		CreateVideo(req *CreateVideoRequest) (*CreateVideoResponse, error)
+		IngestVideo(videoID string, req *IngestVideoRequest) (*IngestVideoResponse, error)
+	}
 
-type client struct {
-	accessToken  string
-	accountID    string
-	clientID     string
-	clientSecret string
-	httpClient   *http.Client
-}
+	client struct {
+		accessToken           string
+		accessTokenAcquiredAt time.Time
+		accountID             string
+		clientID              string
+		clientSecret          string
+		httpClient            *http.Client
+	}
+
+	getAccessTokenResponse struct {
+		AccessToken string `json:"access_token"`
+		TokenType   string `json:"token_type"`
+		ExpiresIn   int    `json:"expires_in"`
+	}
+)
+
+const authBaseURL = "https://oauth.brightcove.com/v4"
 
 var defaultHTTPClient = &http.Client{
 	Timeout: 5 * time.Second,
@@ -51,15 +62,13 @@ func New(clientID, clientSecret, accountID string, httpClient *http.Client) (Cli
 	return c, nil
 }
 
-const authBaseURL = "https://oauth.brightcove.com/v4"
-
-type getAccessTokenResponse struct {
-	AccessToken string `json:"access_token"`
-	TokenType   string `json:"token_type"`
-	ExpiresIn   int    `json:"expires_in"`
-}
-
 func (c *client) getAccessToken() (string, error) {
+	// Access Token only valid for 5 minutes. If > 5 minutes then get another token and update.
+	// Since we cannot sure, therefore make a 1 minute buffer.
+	if time.Since(c.accessTokenAcquiredAt).Minutes() <= 4 {
+		return c.accessToken, nil
+	}
+
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s/access_token?grant_type=client_credentials", authBaseURL), nil)
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -91,5 +100,7 @@ func (c *client) getAccessToken() (string, error) {
 		return "", err
 	}
 	c.accessToken = a.AccessToken
+	c.accessTokenAcquiredAt = time.Now()
+
 	return a.AccessToken, nil
 }
