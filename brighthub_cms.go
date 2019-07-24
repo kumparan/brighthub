@@ -39,9 +39,9 @@ const (
 	StateActive State = "ACTIVE"
 	// StateInactive :nodoc:
 	StateInactive State = "INACTIVE"
-
-	cmsBaseURL = "https://cms.api.brightcove.com/v1"
 )
+
+var cmsBaseURL = "https://cms.api.brightcove.com/v1"
 
 // CreateVideo :nodoc:
 func (c *client) CreateVideo(req *CreateVideoRequest) (*CreateVideoResponse, error) {
@@ -141,7 +141,7 @@ func (c *client) AddVideoToFolder(videoID, folderID string) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusNoContent {
 		switch resp.StatusCode {
 		case http.StatusUnauthorized:
 			return ErrUnauthorized

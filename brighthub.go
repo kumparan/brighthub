@@ -33,11 +33,12 @@ type (
 	}
 )
 
-const authBaseURL = "https://oauth.brightcove.com/v4"
-
-var defaultHTTPClient = &http.Client{
-	Timeout: 5 * time.Second,
-}
+var (
+	authBaseURL       = "https://oauth.brightcove.com/v4"
+	defaultHTTPClient = &http.Client{
+		Timeout: 5 * time.Second,
+	}
+)
 
 // New :nodoc:
 func New(clientID, clientSecret, accountID string, httpClient *http.Client) (Client, error) {
@@ -99,8 +100,8 @@ func (c *client) getAccessToken() (string, error) {
 			Error(err)
 		return "", err
 	}
+
 	c.accessToken = a.AccessToken
 	c.accessTokenAcquiredAt = time.Now()
-
 	return a.AccessToken, nil
 }

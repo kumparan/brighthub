@@ -39,9 +39,9 @@ const (
 	PriorityLow Priority = "low"
 	// PriorityNormal :nodoc:
 	PriorityNormal Priority = "normal"
-
-	dynamicIngestBaseURL = "https://ingest.api.brightcove.com/v1"
 )
+
+var dynamicIngestBaseURL = "https://ingest.api.brightcove.com/v1"
 
 // IngestVideo :nodoc:
 func (c *client) IngestVideo(videoID string, req *IngestVideoRequest) (*IngestVideoResponse, error) {
