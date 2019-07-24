@@ -1,4 +1,4 @@
-module brighthub
+module github.com/kumparan/brighthub
 
 go 1.12
 
