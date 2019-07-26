@@ -1,4 +1,7 @@
 test:
 	richgo test ./... -v --cover
 
-.PHONY: test
+mockgen:
+	mockgen -destination=mock/mock_brighthub.go -package=mock github.com/kumparan/brighthub Client
+
+.PHONY: test mockgen

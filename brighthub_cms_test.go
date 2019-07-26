@@ -12,7 +12,7 @@ import (
 
 func TestClient_CreateVideo(t *testing.T) {
 	httpMock := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusCreated)
 		w.Header().Set("Content-Type", "application/json")
 		io.WriteString(w, `{"id": "id-video-lucu", "account_id": "account-id-kamu"}`)
 	}))
