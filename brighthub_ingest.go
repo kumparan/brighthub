@@ -20,6 +20,7 @@ type (
 		Priority      Priority           `json:"priority"`
 		CaptureImages bool               `json:"capture-images"`
 		Callbacks     []string           `json:"callbacks,omitempty"`
+		Profile       string             `json:"profile"`
 		// TODO add more request body
 	}
 
