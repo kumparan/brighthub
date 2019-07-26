@@ -56,7 +56,7 @@ func TestClient_GetIngestProfile(t *testing.T) {
 		}`)
 	}))
 	defer httpMock.Close()
-	dynamicIngestBaseURL = httpMock.URL // change for test
+	ingestionBaseURL = httpMock.URL // change for test
 
 	bh := newClientMock()
 	bh.httpClient = httpMock.Client()

@@ -55,7 +55,10 @@ const (
 	PriorityNormal Priority = "normal"
 )
 
-var dynamicIngestBaseURL = "https://ingest.api.brightcove.com/v1"
+var (
+	dynamicIngestBaseURL = "https://ingest.api.brightcove.com/v1"
+	ingestionBaseURL     = "https://ingestion.api.brightcove.com/v1"
+)
 
 // IngestVideo :nodoc:
 func (c *client) IngestVideo(videoID string, req *IngestVideoRequest) (*IngestVideoResponse, error) {
@@ -137,7 +140,7 @@ func (c *client) GetIngestProfile(id string) (*IngestProfile, error) {
 		return nil, err
 	}
 
-	r, err := http.NewRequest("GET", fmt.Sprintf("%s/accounts/%s/profiles/%s", dynamicIngestBaseURL, c.accountID, id), nil)
+	r, err := http.NewRequest("GET", fmt.Sprintf("%s/accounts/%s/profiles/%s", ingestionBaseURL, c.accountID, id), nil)
 	if err != nil {
 		log.WithFields(log.Fields{"profileID": id}).Error(err)
 		return nil, err
