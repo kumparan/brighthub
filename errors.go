@@ -25,4 +25,6 @@ var (
 	ErrResourceNotFound = errors.New("the api could not find the resource you requested")
 	// ErrNotAvailable :nodoc:
 	ErrNotAvailable = errors.New("the resource you are requesting is temporarily unavailable")
+	// ErrProfileError :nodoc:
+	ErrProfileError = errors.New("profile rendition count exceeds configured rendition limit")
 )

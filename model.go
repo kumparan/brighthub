@@ -1,9 +1,12 @@
 package brighthub
 
 type (
-	Action     string
+	// Action :nodoc:
+	Action string
+	// EntityType :nodoc:
 	EntityType string
-	Status     string
+	// Status :nodoc:
+	Status string
 )
 
 const (
