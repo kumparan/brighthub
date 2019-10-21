@@ -32,6 +32,18 @@ type (
 		AccountID string `json:"account_id"`
 		// TODO add more response field
 	}
+
+	// VideoMasterInfo :nodoc:
+	VideoMasterInfo struct {
+		EncodingRate int64  `json:"encoding_rate"`
+		Height       int64  `json:"height"`
+		Width        int64  `json:"width"`
+		ID           string `json:"id"`
+		Size         int64  `json:"size"`
+		UpdatedAt    string `json:"updated_at"`
+		CreatedAt    string `json:"created_at"`
+		Duration     int64  `json:"duration"`
+	}
 )
 
 const (
@@ -161,4 +173,62 @@ func (c *client) AddVideoToFolder(videoID, folderID string) error {
 	}
 
 	return nil
+}
+
+// GetVideoMasterInfo :nodoc:
+func (c *client) GetVideoMasterInfo(videoID string) (*VideoMasterInfo, error) {
+	token, err := c.getAccessToken()
+	if err != nil {
+		log.WithFields(log.Fields{
+			"videoID": videoID}).
+			Error(err)
+		return nil, err
+	}
+
+	r, err := http.NewRequest("GET", fmt.Sprintf("%s/accounts/%s/videos/%s/digital_master", cmsBaseURL, c.accountID, videoID), nil)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"videoID": videoID}).
+			Error(err)
+		return nil, err
+	}
+	r.Header.Set("Content-Type", "application/json")
+	r.Header.Set("Authorization", "Bearer "+token)
+
+	resp, err := c.httpClient.Do(r)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"videoID": videoID}).
+			Error(err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		switch resp.StatusCode {
+		case http.StatusUnauthorized:
+			return nil, ErrUnauthorized
+		case http.StatusForbidden, http.StatusUnprocessableEntity:
+			return nil, ErrIllegalField
+		case http.StatusMethodNotAllowed:
+			return nil, ErrMethodNotAllowed
+		case http.StatusConflict:
+			return nil, ErrDuplicateReferenceID
+		case http.StatusTooManyRequests:
+			return nil, ErrTooManyRequest
+		default:
+			return nil, fmt.Errorf("undefined error with code %d", resp.StatusCode)
+		}
+	}
+
+	videoMasterInfo := new(VideoMasterInfo)
+	err = json.NewDecoder(resp.Body).Decode(&videoMasterInfo)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"videoID": videoID}).
+			Error(err)
+		return nil, err
+	}
+
+	return videoMasterInfo, nil
 }
