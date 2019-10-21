@@ -77,6 +77,21 @@ func (mr *MockClientMockRecorder) GetIngestProfile(arg0 interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetIngestProfile", reflect.TypeOf((*MockClient)(nil).GetIngestProfile), arg0)
 }
 
+// GetVideoMasterInfo mocks base method
+func (m *MockClient) GetVideoMasterInfo(arg0 string) (*brighthub.VideoMasterInfo, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetVideoMasterInfo", arg0)
+	ret0, _ := ret[0].(*brighthub.VideoMasterInfo)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetVideoMasterInfo indicates an expected call of GetVideoMasterInfo
+func (mr *MockClientMockRecorder) GetVideoMasterInfo(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetVideoMasterInfo", reflect.TypeOf((*MockClient)(nil).GetVideoMasterInfo), arg0)
+}
+
 // IngestVideo mocks base method
 func (m *MockClient) IngestVideo(arg0 string, arg1 *brighthub.IngestVideoRequest) (*brighthub.IngestVideoResponse, error) {
 	m.ctrl.T.Helper()

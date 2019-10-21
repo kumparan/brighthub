@@ -16,6 +16,7 @@ type (
 		CreateVideo(req *CreateVideoRequest) (*CreateVideoResponse, error)
 		GetIngestProfile(id string) (*IngestProfile, error)
 		IngestVideo(videoID string, req *IngestVideoRequest) (*IngestVideoResponse, error)
+		GetVideoMasterInfo(videoID string) (*VideoMasterInfo, error)
 	}
 
 	client struct {
