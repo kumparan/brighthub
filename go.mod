@@ -7,6 +7,6 @@ require (
 	github.com/golang/mock v1.3.1
 	github.com/icrowley/fake v0.0.0-20180203215853-4178557ae428
 	github.com/kumparan/go-lib v1.2.1
-	github.com/sirupsen/logrus v1.2.0
-	github.com/stretchr/testify v1.3.0
+	github.com/sirupsen/logrus v1.8.3
+	github.com/stretchr/testify v1.7.0
 )
